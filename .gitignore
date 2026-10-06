@@ -1,0 +1,8 @@
+*.class
+bin/
+.idea/
+.vscode/
+
+# Arquivos de teste gerados para a análise empírica da Etapa 3 (podem ser
+# grandes - dezenas de MB - e são reproduzíveis via util.GeradorEntrada)
+colecoes/dados_teste/
