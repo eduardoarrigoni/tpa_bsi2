@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Roda os testes empíricos da seção 3 do relatório e grava os tempos em CSV.
+# Roda os testes empíricos das seções 3 e 5 do relatório e grava os tempos em CSV.
 #
 # Uso (a partir da pasta colecoes, com o projeto já compilado em bin/):
 #   bash scripts/rodar_experimentos.sh [repeticoes] [arquivo_csv]
@@ -10,13 +10,14 @@
 #   aleatorio_N.txt   arquivo do trabalho de listas (util.GeradorEntrada)
 # e executa contato.GerenciadorContatos de forma não-interativa: carrega o
 # arquivo, pesquisa o pior caso por telefone, pesquisa o mesmo contato por
-# nome e o remove por telefone.
+# nome e o remove por telefone. A árvore AVL (seção 5) roda com ordenado_N.txt,
+# usando como pior caso a folha mais profunda da AVL.
 set -euo pipefail
 
 REPETICOES="${1:-3}"
 CSV="${2:-dados_teste/resultados.csv}"
 TAMANHOS="${TAMANHOS:-10000 25000 50000 100000}"
-ESTRUTURAS="${ESTRUTURAS:-arvore lista}"
+ESTRUTURAS="${ESTRUTURAS:-arvore avl lista}"
 
 mkdir -p dados_teste
 echo "estrutura,arquivo,n,repeticao,carga_ms,busca_telefone_ns,busca_nome_ns,remocao_ns,quantidade_final" > "$CSV"
@@ -41,8 +42,14 @@ executar() {
 valor() { echo "$1" | grep "^$2=" | cut -d= -f2-; }
 
 for n in $TAMANHOS; do
-    if [[ " $ESTRUTURAS " == *" arvore "* ]]; then
+    if [[ " $ESTRUTURAS " == *" arvore "* || " $ESTRUTURAS " == *" avl "* ]]; then
         info=$(java -cp bin util.GeradorArquivosOrdenados "$n" "dados_teste/ordenado_$n.txt")
+    fi
+    if [[ " $ESTRUTURAS " == *" avl "* ]]; then
+        executar avl 4 "dados_teste/ordenado_$n.txt" "$n" \
+            "$(valor "$info" PIOR_CASO_AVL_NOME)" "$(valor "$info" PIOR_CASO_AVL_TELEFONE)"
+    fi
+    if [[ " $ESTRUTURAS " == *" arvore "* ]]; then
         executar arvore_degenerada 3 "dados_teste/ordenado_$n.txt" "$n" \
             "$(valor "$info" PIOR_CASO_NOME)" "$(valor "$info" PIOR_CASO_TELEFONE)"
 
