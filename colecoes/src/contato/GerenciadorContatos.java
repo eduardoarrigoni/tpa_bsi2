@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
+import arvorebinaria.ArvoreAVL;
 import arvorebinaria.ArvoreBinaria;
 import colecao.IColecao;
 import listaencadeada.ListaEncadeada;
@@ -29,6 +30,9 @@ public class GerenciadorContatos {
         if (estrutura == 3) {
             estruturaPorNome = new ArvoreBinaria<Contato>(new ComparadorContatoPorNome());
             estruturaPorTelefone = new ArvoreBinaria<Contato>(new ComparadorContatoPorTelefone());
+        } else if (estrutura == 4) {
+            estruturaPorNome = new ArvoreAVL<Contato>(new ComparadorContatoPorNome());
+            estruturaPorTelefone = new ArvoreAVL<Contato>(new ComparadorContatoPorTelefone());
         } else {
             boolean ehOrdenada = estrutura == 1;
             estruturaPorNome = new ListaEncadeada<Contato>(new ComparadorContatoPorNome(), ehOrdenada);
@@ -79,12 +83,13 @@ public class GerenciadorContatos {
             System.out.println("1 - Lista ordenada");
             System.out.println("2 - Lista não-ordenada");
             System.out.println("3 - Árvore binária");
+            System.out.println("4 - Árvore AVL");
             System.out.print("Escolha uma opção: ");
             opcao = lerOpcaoMenu(scanner);
-            if (opcao < 1 || opcao > 3) {
+            if (opcao < 1 || opcao > 4) {
                 System.out.println("Opção inválida!");
             }
-        } while (opcao < 1 || opcao > 3);
+        } while (opcao < 1 || opcao > 4);
         return opcao;
     }
 
