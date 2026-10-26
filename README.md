@@ -34,7 +34,7 @@ Rode os comandos abaixo a partir da pasta `colecoes` (é onde fica o `entrada.tx
 ```
 java -cp bin contato.GerenciadorContatos
 ```
-O programa pergunta a estrutura (1 - lista ordenada, 2 - lista não-ordenada, 3 - árvore binária). Para carregar outro arquivo em vez de `entrada.txt`, passe o caminho como argumento:
+O programa pergunta a estrutura (1 - lista ordenada, 2 - lista não-ordenada, 3 - árvore binária, 4 - árvore AVL). A AVL fica em `arvorebinaria/ArvoreAVL.java`, que herda de `ArvoreBinaria` e sobrescreve `adicionar` e `remover` com o rebalanceamento por rotações. Para carregar outro arquivo em vez de `entrada.txt`, passe o caminho como argumento:
 ```
 java -cp bin contato.GerenciadorContatos dados_teste/balanceado_10000.txt
 ```
@@ -49,4 +49,9 @@ java -cp bin util.GeradorArquivosBalanceados 10000 dados_teste/balanceado_10000.
 ```bash
 bash scripts/rodar_experimentos.sh 3 dados_teste/resultados.csv
 ```
-O primeiro argumento é o número de repetições por arquivo. As variáveis `TAMANHOS` e `ESTRUTURAS` restringem a execução, por exemplo `TAMANHOS="10000 25000" ESTRUTURAS=arvore bash scripts/rodar_experimentos.sh`. As execuções com árvore degenerada e com listas levam vários minutos nos tamanhos maiores.
+O primeiro argumento é o número de repetições por arquivo. As variáveis `TAMANHOS` e `ESTRUTURAS` (`arvore`, `avl`, `lista`) restringem a execução, por exemplo `TAMANHOS="10000 25000" ESTRUTURAS="arvore avl" bash scripts/rodar_experimentos.sh`. O `GeradorArquivosOrdenados` imprime dois piores casos: `PIOR_CASO_*` (última folha da árvore degenerada) e `PIOR_CASO_AVL_*` (folha mais profunda da AVL montada com o mesmo arquivo). As execuções com árvore degenerada e com listas levam vários minutos nos tamanhos maiores.
+
+No Windows sem Git Bash, use a versão PowerShell, que produz o mesmo CSV:
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/rodar_experimentos.ps1 -Repeticoes 3 -Estruturas arvore,avl
+```
